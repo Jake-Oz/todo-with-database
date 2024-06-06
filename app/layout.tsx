@@ -28,7 +28,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-w-[375px] container mx-auto h-screen bg-light-theme-very-light-gray bg-bg-mobile-light dark:bg-bg-mobile-dark sm:bg-bg-desktop-light sm:dark:bg-bg-desktop-dark dark:bg-dark-theme-very-dark-blue bg-no-repeat bg-contain sm:bg-auto ">
+          <main className="min-w-[375px] px-5 container h-screen bg-light-theme-very-light-gray bg-bg-mobile-light dark:bg-bg-mobile-dark sm:bg-bg-desktop-light sm:dark:bg-bg-desktop-dark dark:bg-dark-theme-very-dark-blue bg-no-repeat bg-contain sm:bg-auto ">
             <div className="mx-auto sm:w-[540px]">
               <Heading />
               {children}
