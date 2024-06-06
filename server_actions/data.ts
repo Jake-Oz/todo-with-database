@@ -24,7 +24,6 @@ const prisma = (() => {
 
 export async function getTodos() {
   noStore();
-
   try {
     const todos = await prisma.todo.findMany({
       orderBy: {
