@@ -20,12 +20,12 @@ const Heading = () => {
         Todo
       </h1>
 
-      {theme === "light" && (
+      {isClient && theme === "light" && (
         <div className="cursor-pointer" onClick={() => setTheme("dark")}>
           <Image src={moon} alt="moon" />
         </div>
       )}
-      {theme === "dark" && (
+      {isClient && theme === "dark" && (
         <div className="cursor-pointer" onClick={() => setTheme("light")}>
           <Image src={sun} alt="sun" />
         </div>
