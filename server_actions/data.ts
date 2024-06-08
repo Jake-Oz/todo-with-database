@@ -1,7 +1,6 @@
 "use server";
 
 import { PrismaClient, Todo } from "@prisma/client";
-import { unstable_noStore as noStore } from "next/cache";
 import { ZodError, z } from "zod";
 import { revalidatePath } from "next/cache";
 
@@ -9,28 +8,19 @@ const inputSchema = z.object({
   todo: z.string().min(1, "Please enter a task"),
 });
 
-const prisma = (() => {
-  let instance: PrismaClient;
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-  const createInstance = () => {
-    if (!instance) {
-      instance = new PrismaClient();
-    }
-    return instance;
-  };
+const prisma = globalForPrisma.prisma || new PrismaClient();
 
-  return createInstance();
-})();
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export async function getTodos() {
-  noStore();
   try {
     const todos = await prisma.todo.findMany({
       orderBy: {
         order: "desc",
       },
     });
-    revalidatePath("/");
     return todos;
   } catch (error) {
     throw new Error("Todos not found");
@@ -38,7 +28,6 @@ export async function getTodos() {
 }
 
 export async function addTodo(formData: FormData) {
-  noStore();
   try {
     const { todo } = inputSchema.parse({ todo: formData.get("todo") });
 
@@ -60,7 +49,7 @@ export async function addTodo(formData: FormData) {
         order: newOrder,
       },
     });
-
+    revalidatePath("/");
     return newTodo;
   } catch (error) {
     if (error instanceof ZodError) {
@@ -72,35 +61,52 @@ export async function addTodo(formData: FormData) {
 }
 
 export async function removeTodo(id: number) {
-  noStore();
   try {
     const removedTodo = await prisma.todo.delete({
       where: {
         id: id,
       },
     });
-
+    revalidatePath("/", "layout");
     return removedTodo;
   } catch (error) {
     throw new Error("Unable to remove todo");
   }
 }
 
-export async function updateTodoOrder({
+export async function updateTodoStatus({
   id,
-  order,
-}: Pick<Todo, "id" | "order">) {
+  active,
+}: Pick<Todo, "id" | "active">) {
   try {
     const updatedTodo = await prisma.todo.update({
       where: {
         id: id,
       },
       data: {
-        order: order,
+        active: active,
       },
     });
-
+    revalidatePath("/", "layout");
     return updatedTodo;
+  } catch (error) {
+    throw new Error("Unable to update todo status");
+  }
+}
+
+export async function updateTodoOrder(cards: Todo[]) {
+  try {
+    cards.map(async (card, index) => {
+      const updatedTodo = await prisma.todo.update({
+        where: {
+          id: card.id,
+        },
+        data: {
+          order: card.order,
+        },
+      });
+    });
+    revalidatePath("/", "layout");
   } catch (error) {
     throw new Error("Unable to update todo order");
   }

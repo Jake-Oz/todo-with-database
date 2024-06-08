@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 type CardProps = Todo & {
   className: string;
   updateStatus: (id: number) => void;
-  updatingCards: Dispatch<SetStateAction<boolean>>;
+  refreshTodos: () => void;
 };
 
 const Card = ({
@@ -18,15 +18,14 @@ const Card = ({
   todo,
   active,
   updateStatus,
-  updatingCards,
+  refreshTodos,
+
   className,
 }: CardProps) => {
   async function deleteTodo(id: number) {
     const removedTodo = await removeTodo(id);
     if (!removedTodo) {
       throw new Error("Todo not found");
-    } else {
-      updatingCards((prev: boolean) => !prev);
     }
   }
 
@@ -59,7 +58,10 @@ const Card = ({
           src={iconCross}
           alt="delete"
           className="hidden group-hover:block cursor-pointer"
-          onClick={() => deleteTodo(id)}
+          onClick={() => {
+            deleteTodo(id);
+            refreshTodos();
+          }}
         />
       </div>
     </div>

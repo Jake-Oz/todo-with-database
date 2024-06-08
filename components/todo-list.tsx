@@ -4,25 +4,34 @@ import Card from "./ui/card";
 import { Reorder } from "framer-motion";
 import InputCard from "./ui/input-card";
 import { Todo } from "@prisma/client";
-import { getTodos, removeTodo, updateTodoOrder } from "@/server_actions/data";
+import {
+  getTodos,
+  removeTodo,
+  updateTodoOrder,
+  updateTodoStatus,
+} from "@/server_actions/data";
 import { cn } from "@/lib/utils";
 import Filters from "./filters";
 import { filterType } from "@/lib/types";
 
-export default function TodoList() {
+export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
   const [filter, setFilter] = useState<filterType>("all");
-  const [cards, setCards] = useState<Todo[]>([]);
-  const [updatingCards, setUpdatingCards] = useState(false);
+  const [cards, setCards] = useState<Todo[]>(initialTodos);
 
-  function handleActiveUpdate(id: number) {
+  async function handleActiveUpdate(id: number) {
     const temp = cards.map((card) => {
       if (card.id === id) {
         card.active = !card.active;
+
         return card;
       }
       return card;
     });
     setCards(temp);
+    await updateTodoStatus({
+      id,
+      active: cards.find((card) => card.id === id)!.active,
+    });
   }
 
   async function clearCompletedItems() {
@@ -31,25 +40,29 @@ export default function TodoList() {
         await removeTodo(card.id);
       }
     });
+    refreshTodos();
+  }
+
+  async function updateOrder() {
+    const temp = cards.map((card, index) => {
+      card.order = index;
+      return card;
+    });
+    await updateTodoOrder(temp);
+  }
+
+  async function refreshTodos() {
     const newCards = await getTodos();
     setCards(newCards.sort((a, b) => a.order - b.order));
   }
 
   useEffect(() => {
-    getTodos().then((data) => setCards(data.sort((a, b) => a.order - b.order)));
-  }, [updatingCards]);
-
-  useEffect(() => {
-    cards.map((card, index) => {
-      card.order = index;
-      updateTodoOrder(card);
-      return card;
-    });
+    updateOrder();
   }, [cards]);
 
   return (
     <main className="w-full ">
-      <InputCard className="mb-5" updatingCards={setUpdatingCards} />
+      <InputCard className="mb-5" refreshTodos={refreshTodos} />
 
       <div className="">
         <Reorder.Group
@@ -85,7 +98,7 @@ export default function TodoList() {
                   className="dark:bg-dark-theme-very-dark-desaturated-blue"
                   {...card}
                   updateStatus={handleActiveUpdate}
-                  updatingCards={setUpdatingCards}
+                  refreshTodos={refreshTodos}
                 />
               </Reorder.Item>
             ))}

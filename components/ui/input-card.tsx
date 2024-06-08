@@ -2,25 +2,30 @@
 
 import { z } from "zod";
 import { addTodo } from "@/server_actions/data";
-import { useRef, Dispatch, SetStateAction } from "react";
+import { useRef, useTransition } from "react";
 
 const inputSchema = z.string().min(1, "Please enter a task");
 
 const InputCard = ({
   className,
-  updatingCards,
+  refreshTodos,
 }: {
   className?: string;
-  updatingCards: Dispatch<SetStateAction<boolean>>;
+  refreshTodos: () => void;
 }) => {
   const inputRef = useRef<HTMLFormElement>(null);
+  const [isPending, startTransition] = useTransition();
+
   return (
     <div className={`${className}`}>
       <form
         ref={inputRef}
         action={(e) => {
-          addTodo(e);
-          updatingCards((prev: boolean) => !prev);
+          startTransition(() => {
+            addTodo(e);
+            refreshTodos();
+          });
+
           inputRef.current?.reset();
         }}
       >
@@ -28,7 +33,7 @@ const InputCard = ({
           <div className="h-6 w-7 rounded-full border border-neutral-very-light-grayish-blue dark:border-neutral-very-dark-grayish-blue " />
           <input
             className="w-full outline-none text-sm sm:text-lg py-1 sm:py-0 dark:bg-dark-theme-very-dark-desaturated-blue dark:text-dark-theme-light-grayish-blue caret-primary-bright-blue"
-            placeholder="Create a new todo..."
+            placeholder={isPending ? "Adding Todo... " : "Create a new todo..."}
             type="text"
             name="todo"
           ></input>
