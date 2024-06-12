@@ -13,8 +13,15 @@ import {
 import { cn } from "@/lib/utils";
 import Filters from "./filters";
 import { filterType } from "@/lib/types";
+import { User } from "@prisma/client";
 
-export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
+export default function TodoList({
+  initialTodos,
+  user,
+}: {
+  initialTodos: Todo[];
+  user: User;
+}) {
   const [filter, setFilter] = useState<filterType>("all");
   const [cards, setCards] = useState<Todo[]>(initialTodos);
 
@@ -37,7 +44,7 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
   async function clearCompletedItems() {
     cards.map(async (card) => {
       if (!card.active) {
-        await removeTodo(card.id);
+        await removeTodo(card.id, user.id);
       }
     });
     refreshTodos();
@@ -52,8 +59,18 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
   }
 
   async function refreshTodos() {
-    const newCards = await getTodos();
+    const newCards = await getTodos(user.id);
+
     setCards(newCards.sort((a, b) => a.order - b.order));
+  }
+
+  async function deleteTodo(id: number) {
+    const removedTodo = await removeTodo(id, user.id);
+    if (!removedTodo) {
+      throw new Error("Could not remove todo");
+    } else {
+      refreshTodos();
+    }
   }
 
   useEffect(() => {
@@ -62,7 +79,7 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
 
   return (
     <main className="w-full ">
-      <InputCard className="mb-5" refreshTodos={refreshTodos} />
+      <InputCard className="mb-5" refreshTodos={refreshTodos} user={user} />
 
       <div className="">
         <Reorder.Group
@@ -98,7 +115,7 @@ export default function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
                   className="dark:bg-dark-theme-very-dark-desaturated-blue"
                   {...card}
                   updateStatus={handleActiveUpdate}
-                  refreshTodos={refreshTodos}
+                  deleteTodo={deleteTodo}
                 />
               </Reorder.Item>
             ))}

@@ -3,15 +3,18 @@
 import { z } from "zod";
 import { addTodo } from "@/server_actions/data";
 import { useRef, useTransition } from "react";
+import { User } from "@prisma/client";
 
 const inputSchema = z.string().min(1, "Please enter a task");
 
 const InputCard = ({
   className,
   refreshTodos,
+  user,
 }: {
   className?: string;
   refreshTodos: () => void;
+  user: User;
 }) => {
   const inputRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
@@ -22,7 +25,7 @@ const InputCard = ({
         ref={inputRef}
         action={(e) => {
           startTransition(() => {
-            addTodo(e);
+            addTodo(e, user.id);
             refreshTodos();
           });
 

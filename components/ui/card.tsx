@@ -4,13 +4,12 @@ import { Todo } from "@prisma/client";
 import iconCheck from "@/public/icon-check.svg";
 import iconCross from "@/public/icon-cross.svg";
 import Image from "next/image";
-import { removeTodo } from "@/server_actions/data";
-import { Dispatch, SetStateAction } from "react";
 
 type CardProps = Todo & {
   className: string;
   updateStatus: (id: number) => void;
-  refreshTodos: () => void;
+
+  deleteTodo: (id: number) => void;
 };
 
 const Card = ({
@@ -18,17 +17,10 @@ const Card = ({
   todo,
   active,
   updateStatus,
-  refreshTodos,
 
+  deleteTodo,
   className,
 }: CardProps) => {
-  async function deleteTodo(id: number) {
-    const removedTodo = await removeTodo(id);
-    if (!removedTodo) {
-      throw new Error("Todo not found");
-    }
-  }
-
   return (
     <div className={`${className} relative group`}>
       <div className="flex justify-between items-center px-6 py-3 sm:py-4">
@@ -60,7 +52,6 @@ const Card = ({
           className="hidden group-hover:block cursor-pointer"
           onClick={() => {
             deleteTodo(id);
-            refreshTodos();
           }}
         />
       </div>

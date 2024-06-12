@@ -1,24 +1,19 @@
 "use server";
 
-import { PrismaClient, Todo } from "@prisma/client";
 import { ZodError, z } from "zod";
 import { revalidatePath } from "next/cache";
+import prisma from "@/prisma/prisma_client";
+import { User, Todo } from "@prisma/client";
 
 const inputSchema = z.object({
   todo: z.string().min(1, "Please enter a task"),
 });
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
-
-const prisma = globalForPrisma.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-
-export async function getTodos() {
+export async function getTodos(userId?: string) {
   try {
     const todos = await prisma.todo.findMany({
-      orderBy: {
-        order: "desc",
+      where: {
+        authorId: userId,
       },
     });
     return todos;
@@ -27,28 +22,28 @@ export async function getTodos() {
   }
 }
 
-export async function addTodo(formData: FormData) {
+export async function addTodo(formData: FormData, userId: string) {
   try {
     const { todo } = inputSchema.parse({ todo: formData.get("todo") });
 
     const maxOrder = await prisma.todo.findMany({
-      orderBy: {
-        order: "desc",
-      },
-      select: {
-        order: true,
+      where: {
+        authorId: userId,
       },
     });
 
-    const newOrder = maxOrder[0] ? maxOrder[0].order + 1 : 0;
+    const newOrder = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
 
     const newTodo = await prisma.todo.create({
       data: {
+        authorId: userId,
         todo: todo,
         active: true,
         order: newOrder,
       },
     });
+
+    console.log("Todo created:", newTodo);
     revalidatePath("/");
     return newTodo;
   } catch (error) {
@@ -60,15 +55,16 @@ export async function addTodo(formData: FormData) {
   }
 }
 
-export async function removeTodo(id: number) {
+export async function removeTodo(id: number, userId: string) {
   try {
-    const removedTodo = await prisma.todo.delete({
+    const deletedTodo = await prisma.todo.delete({
       where: {
         id: id,
       },
     });
-    revalidatePath("/", "layout");
-    return removedTodo;
+
+    console.log("Todo deleted:", deletedTodo);
+    return deletedTodo;
   } catch (error) {
     throw new Error("Unable to remove todo");
   }
@@ -87,7 +83,7 @@ export async function updateTodoStatus({
         active: active,
       },
     });
-    revalidatePath("/", "layout");
+    revalidatePath("/");
     return updatedTodo;
   } catch (error) {
     throw new Error("Unable to update todo status");
@@ -106,7 +102,7 @@ export async function updateTodoOrder(cards: Todo[]) {
         },
       });
     });
-    revalidatePath("/", "layout");
+    revalidatePath("/");
   } catch (error) {
     throw new Error("Unable to update todo order");
   }
