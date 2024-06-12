@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import React, { useEffect } from "react";
 
-const Heading = () => {
+const Heading = ({ children }: { children: React.ReactNode }) => {
   const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = React.useState(false);
 
@@ -35,6 +35,7 @@ const Heading = () => {
           <Image src={sun} alt="sun" />
         </div>
       )}
+      {children}
     </div>
   );
 };
