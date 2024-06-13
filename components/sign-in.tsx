@@ -20,7 +20,7 @@ export default function SignIn() {
         }}
       >
         <Input type="text" name="email" placeholder="Email" />
-        <Button type="submit">Sign in with Resend</Button>
+        <Button type="submit">Sign in with Email</Button>
       </form>
     </div>
   );
