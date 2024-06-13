@@ -15,8 +15,8 @@ export default function SignIn() {
       </form>
       <form
         action={async (formData) => {
-          "use server";
-          await signIn("resend", formData, { redirect: encodeURI("/") });
+          // "use server";
+          await signIn("resend", formData);
         }}
       >
         <Input type="text" name="email" placeholder="Email" />
