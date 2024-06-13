@@ -15,7 +15,7 @@ export default function SignIn() {
       </form>
       <form
         action={async (formData) => {
-          // "use server";
+          "use server";
           await signIn("resend", formData);
         }}
       >
