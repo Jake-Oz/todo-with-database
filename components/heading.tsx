@@ -24,18 +24,19 @@ const Heading = ({ children }: { children: React.ReactNode }) => {
       <h1 className="text-3xl sm:text-4xl font-bold text-light-theme-very-light-gray  uppercase tracking-[1rem]">
         Todo
       </h1>
-
-      {isClient && theme === "light" && (
-        <div className="cursor-pointer" onClick={() => setTheme("dark")}>
-          <Image src={moon} alt="moon" />
-        </div>
-      )}
-      {isClient && theme === "dark" && (
-        <div className="cursor-pointer" onClick={() => setTheme("light")}>
-          <Image src={sun} alt="sun" />
-        </div>
-      )}
-      {children}
+      <div className="flex justify-between items-center gap-4">
+        {isClient && theme === "light" && (
+          <div className="cursor-pointer" onClick={() => setTheme("dark")}>
+            <Image src={moon} alt="moon" />
+          </div>
+        )}
+        {isClient && theme === "dark" && (
+          <div className="cursor-pointer" onClick={() => setTheme("light")}>
+            <Image src={sun} alt="sun" />
+          </div>
+        )}
+        {children}
+      </div>
     </div>
   );
 };
