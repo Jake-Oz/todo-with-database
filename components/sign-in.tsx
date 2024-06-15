@@ -6,7 +6,6 @@ import { TfiEmail } from "react-icons/tfi";
 
 import darkSignInWithGoogle from "@/public/web_dark_rd_SI@1x.png";
 import lightSignInWithGoogle from "@/public/web_light_rd_SI@1x.png";
-import { redirect } from "next/dist/server/api-utils";
 
 export default function SignIn() {
   return (
@@ -40,7 +39,11 @@ export default function SignIn() {
         <form
           action={async (formData) => {
             "use server";
+            // try {
             await signIn("resend", formData);
+            // } catch (error) {
+            //   console.error(error);
+            // }
           }}
           className="flex flex-col items-center gap-4"
         >
@@ -52,10 +55,12 @@ export default function SignIn() {
           />
           <Button
             type="submit"
-            className="rounded-3xl flex place-content-center  gap-2 h-10 w-44 dark:bg-dark-theme-very-dark-blue bg-neutral-white text-dark-theme-very-dark-blue dark:text-neutral-white"
+            className="rounded-3xl h-10 w-44 dark:bg-dark-theme-very-dark-blue bg-neutral-white text-dark-theme-very-dark-blue dark:text-neutral-white"
           >
-            <TfiEmail />
-            Sign in with Email
+            <div className="flex items-center justify-center gap-2 ">
+              <TfiEmail className="mb-1 text-lg" />
+              <span>Sign in with Email</span>
+            </div>
           </Button>
         </form>
       </div>
