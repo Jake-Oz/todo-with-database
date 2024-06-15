@@ -9,7 +9,9 @@ export default function SignIn() {
         await signOut();
       }}
     >
-      <Button type="submit">Sign Out</Button>
+      <Button type="submit" className="text-neutral-white">
+        Sign Out
+      </Button>
     </form>
   );
 }

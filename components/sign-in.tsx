@@ -2,6 +2,7 @@ import { signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { TfiEmail } from "react-icons/tfi";
 
 import darkSignInWithGoogle from "@/public/web_dark_rd_SI@1x.png";
 import lightSignInWithGoogle from "@/public/web_light_rd_SI@1x.png";
@@ -15,7 +16,7 @@ export default function SignIn() {
         <form
           action={async () => {
             "use server";
-            await signIn("google", { redirectTo: "/" });
+            await signIn("google");
           }}
         >
           <button type="submit">
@@ -51,8 +52,9 @@ export default function SignIn() {
           />
           <Button
             type="submit"
-            className="rounded-3xl dark:bg-dark-theme-very-dark-blue bg-neutral-white text-dark-theme-very-dark-blue dark:text-neutral-white"
+            className="rounded-3xl flex place-content-center  gap-2 h-10 w-44 dark:bg-dark-theme-very-dark-blue bg-neutral-white text-dark-theme-very-dark-blue dark:text-neutral-white"
           >
+            <TfiEmail />
             Sign in with Email
           </Button>
         </form>

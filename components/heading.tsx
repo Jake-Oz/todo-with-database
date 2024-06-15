@@ -5,6 +5,7 @@ import sun from "@/public/icon-sun.svg";
 import Image from "next/image";
 
 import React, { useEffect } from "react";
+import Link from "next/link";
 
 const Heading = ({ children }: { children: React.ReactNode }) => {
   const { theme, setTheme } = useTheme();
@@ -21,9 +22,11 @@ const Heading = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex flex-row justify-between items-baseline w-full pt-10 sm:pt-20">
-      <h1 className="text-3xl sm:text-4xl font-bold text-light-theme-very-light-gray  uppercase tracking-[1rem]">
-        Todo
-      </h1>
+      <Link href="/">
+        <h1 className="text-3xl sm:text-4xl font-bold text-light-theme-very-light-gray  uppercase tracking-[1rem]">
+          Todo
+        </h1>
+      </Link>
       <div className="flex justify-between items-center gap-4">
         {isClient && theme === "light" && (
           <div className="cursor-pointer" onClick={() => setTheme("dark")}>
