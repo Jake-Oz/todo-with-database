@@ -30,16 +30,19 @@ export async function addTodo(formData: FormData, userId: string) {
       where: {
         authorId: userId,
       },
+      orderBy: {
+        order: "desc",
+      },
     });
 
-    const newOrder = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
+    const nextOrder = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
 
     const newTodo = await prisma.todo.create({
       data: {
         authorId: userId,
         todo: todo,
         active: true,
-        order: newOrder,
+        order: nextOrder,
       },
     });
 
