@@ -3,7 +3,7 @@
 import { ZodError, z } from "zod";
 import { revalidatePath } from "next/cache";
 import prisma from "@/prisma/prisma_client";
-import { User, Todo } from "@prisma/client";
+import { Todo } from "@prisma/client";
 
 const inputSchema = z.object({
   todo: z.string().min(1, "Please enter a task"),

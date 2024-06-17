@@ -86,7 +86,7 @@ export default function TodoList({
           axis="y"
           values={cards}
           onReorder={setCards}
-          className="rounded-t-md "
+          className="rounded-t-md shadow-2xl bg-neutral-white dark:bg-dark-theme-very-dark-desaturated-blue"
         >
           {cards
             .filter((card) =>
@@ -100,7 +100,7 @@ export default function TodoList({
               <Reorder.Item
                 key={card.id}
                 value={card}
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0, overflow: "hidden" }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 whileDrag={{
@@ -108,6 +108,7 @@ export default function TodoList({
                   opacity: 0.8,
                   boxShadow: "4px 4px 10px lightgray",
                   borderRadius: "16px",
+                  overflow: "visible",
                 }}
                 className="first:rounded-t-md bg-neutral-white dark:bg-dark-theme-very-dark-gray border-b  border-neutral-very-light-grayish-blue dark:border-dark-theme-very-dark-grayish-blue"
               >

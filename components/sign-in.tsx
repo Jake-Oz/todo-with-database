@@ -39,11 +39,7 @@ export default function SignIn() {
         <form
           action={async (formData) => {
             "use server";
-            // try {
             await signIn("resend", formData);
-            // } catch (error) {
-            //   console.error(error);
-            // }
           }}
           className="flex flex-col items-center gap-4"
         >
