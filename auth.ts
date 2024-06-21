@@ -13,10 +13,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       from: "no-reply@jakecampbell.dev",
     }),
   ],
-  // callbacks: {
-  //   async redirect({ url, baseUrl }) {
-  //     console.log("Callback redirecting to: ", url);
-  //     return baseUrl;
-  //   },
-  // },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      console.log("Callback redirecting to: ", url);
+      return baseUrl;
+    },
+  },
 });
