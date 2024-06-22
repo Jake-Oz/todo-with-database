@@ -15,7 +15,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async redirect({ url, baseUrl }) {
-      console.log("Callback redirecting to: ", url);
       return baseUrl;
     },
   },
