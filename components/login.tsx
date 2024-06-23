@@ -15,7 +15,7 @@ const Login = async () => {
       {!user ? (
         <Link href={"/login"}>
           <Button
-            className="bg-dark-theme-very-dark-blue text-neutral-white dark:bg-neutral-white dark:text-dark-theme-very-dark-blue text-lg"
+            className="bg-primary-bright-blue text-neutral-white dark:bg-neutral-white dark:text-dark-theme-very-dark-blue text-lg"
             variant={"destructive"}
             size={"lg"}
           >

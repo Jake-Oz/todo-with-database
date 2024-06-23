@@ -1,13 +1,8 @@
 "use server";
 
-import { ZodError, z } from "zod";
 import { revalidatePath } from "next/cache";
 import prisma from "@/prisma/prisma_client";
 import { Todo } from "@prisma/client";
-
-const inputSchema = z.object({
-  todo: z.string().min(1, "Please enter a task"),
-});
 
 export async function getTodos(userId?: string) {
   try {
@@ -22,10 +17,8 @@ export async function getTodos(userId?: string) {
   }
 }
 
-export async function addTodo(formData: FormData, userId: string) {
+export async function addTodo(todo: string, userId: string) {
   try {
-    const { todo } = inputSchema.parse({ todo: formData.get("todo") });
-
     const maxOrder = await prisma.todo.findMany({
       where: {
         authorId: userId,
@@ -46,15 +39,10 @@ export async function addTodo(formData: FormData, userId: string) {
       },
     });
 
-    console.log("Todo created:", newTodo);
     revalidatePath("/");
     return newTodo;
   } catch (error) {
-    if (error instanceof ZodError) {
-      throw new Error(error.errors[0].message);
-    } else {
-      throw new Error("Unable to add todo");
-    }
+    throw new Error("Unable to add todo");
   }
 }
 
