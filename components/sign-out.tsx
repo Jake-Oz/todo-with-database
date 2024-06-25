@@ -1,7 +1,7 @@
 import { signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 
-export default function SignIn() {
+export default function SignOutButton() {
   return (
     <form
       action={async () => {
@@ -9,7 +9,7 @@ export default function SignIn() {
         await signOut();
       }}
     >
-      <Button type="submit" className="text-neutral-white">
+      <Button type="submit" className=" text-neutral-white   text-lg">
         Sign Out
       </Button>
     </form>

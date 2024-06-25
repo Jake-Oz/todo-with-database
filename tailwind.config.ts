@@ -71,6 +71,10 @@ const config = {
         "bg-mobile-dark": "url('/bg-mobile-dark.jpg')",
         "bg-mobile-light": "url('/bg-mobile-light.jpg')",
       },
+      screens: {
+        superSmall: "600px",
+        superDuperSmall: "440px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
