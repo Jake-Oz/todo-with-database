@@ -44,9 +44,10 @@ export default function SignIn() {
           className="flex flex-col items-center gap-4"
         >
           <Input
-            type="text"
+            type="email"
             name="email"
             placeholder="Email"
+            required
             className="text-dark-theme-very-dark-blue dark:text-neutral-white"
           />
           <Button
