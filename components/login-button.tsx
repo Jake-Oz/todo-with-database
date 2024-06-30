@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
-const Login = async () => {
+const LoginButton = async () => {
   const session = await auth();
   const user = session?.user;
 
@@ -13,7 +13,7 @@ const Login = async () => {
       {!user && (
         <Link href={"/login"}>
           <Button
-            className="bg-primary-bright-blue text-neutral-white dark:bg-neutral-white dark:text-dark-theme-very-dark-blue text-lg"
+            className="bg-gradient-to-tl from-primary-gradient-left to-primary-gradient-right text-neutral-white dark:bg-neutral-white dark:text-dark-theme-very-dark-blue text-lg"
             variant={"destructive"}
             size={"lg"}
           >
@@ -25,4 +25,4 @@ const Login = async () => {
   );
 };
 
-export default Login;
+export default LoginButton;

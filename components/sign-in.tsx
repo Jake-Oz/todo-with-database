@@ -9,7 +9,7 @@ import lightSignInWithGoogle from "@/public/web_light_rd_SI@1x.png";
 
 export default function SignIn() {
   return (
-    <div className="p-4 rounded-lg  w-64 bg-primary-bright-blue dark:bg-neutral-white text-dark-theme-very-dark-blue">
+    <div className="p-4 rounded-lg  w-64 bg-gradient-to-tl from-primary-gradient-left to-primary-gradient-right dark:bg-neutral-white text-dark-theme-very-dark-blue">
       <div className="flex flex-col gap-2 justify-center items-center  text-neutral-white dark:text-dark-theme-very-dark-blue">
         <h1 className="font-bold tracking-widest">TODO Login</h1>
         <form

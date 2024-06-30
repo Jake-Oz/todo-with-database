@@ -5,7 +5,7 @@ import { getTodos } from "@/server_actions/data";
 import { auth } from "@/auth";
 import { User } from "@prisma/client";
 import Welcome from "@/components/welcome";
-import Login from "@/components/login";
+import LoginButton from "@/components/login-button";
 
 const TodoPage = async () => {
   const session = await auth();
@@ -22,7 +22,7 @@ const TodoPage = async () => {
         <Welcome className="sm:mt-36 superSmall:mt-64 superDuperSmall:mt-56 mt-36" />
       )}
       <div className="flex justify-start items-start w-full">
-        <Login />
+        <LoginButton />
       </div>
     </div>
   );
