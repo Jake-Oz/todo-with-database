@@ -1,12 +1,12 @@
 import { signIn } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Passkey from "@/components/passkey";
 import Image from "next/image";
 import { TfiEmail } from "react-icons/tfi";
 
 import darkSignInWithGoogle from "@/public/web_dark_rd_SI@1x.png";
 import lightSignInWithGoogle from "@/public/web_light_rd_SI@1x.png";
-import Passkey from "./passkey";
 import { SessionProvider } from "next-auth/react";
 import OrSpacer from "./ui/or-spacer";
 
@@ -59,7 +59,7 @@ export default function SignIn() {
             </div>
           </Button>
         </form>
-        <OrSpacer />
+
         <SessionProvider>
           <Passkey />
         </SessionProvider>

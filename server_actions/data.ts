@@ -98,3 +98,20 @@ export async function updateTodoOrder(cards: Todo[]) {
     throw new Error("Unable to update todo order");
   }
 }
+
+export async function checkPassKeyRegistration(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        Authenticator: true,
+      },
+    });
+    console.log(user?.Authenticator);
+    return user?.Authenticator ? true : false;
+  } catch (error) {
+    throw new Error("Passkey not found");
+  }
+}
