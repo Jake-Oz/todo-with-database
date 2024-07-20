@@ -6,6 +6,9 @@ import { TfiEmail } from "react-icons/tfi";
 
 import darkSignInWithGoogle from "@/public/web_dark_rd_SI@1x.png";
 import lightSignInWithGoogle from "@/public/web_light_rd_SI@1x.png";
+import Passkey from "./passkey";
+import { SessionProvider } from "next-auth/react";
+import OrSpacer from "./ui/or-spacer";
 
 export default function SignIn() {
   return (
@@ -31,11 +34,7 @@ export default function SignIn() {
             />
           </button>
         </form>
-        <div className="relative w-full flex items-center">
-          <div className="flex-grow border-t border-neutral-dark-grayish-blue"></div>
-          <span className="flex-shrink mx-4 text-gray-400">or</span>
-          <div className="flex-grow border-t border-neutral-dark-grayish-blue"></div>
-        </div>
+        <OrSpacer />
         <form
           action={async (formData) => {
             "use server";
@@ -60,6 +59,10 @@ export default function SignIn() {
             </div>
           </Button>
         </form>
+        <OrSpacer />
+        <SessionProvider>
+          <Passkey />
+        </SessionProvider>
       </div>
     </div>
   );
