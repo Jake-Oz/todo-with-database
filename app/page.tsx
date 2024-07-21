@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import TodoList from "@/components/todo-list";
 import { getTodos } from "@/server_actions/data";
@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { User } from "@prisma/client";
 import Welcome from "@/components/welcome";
 import LoginButton from "@/components/login-button";
+import SkeletonTodo from "@/components/skeletonTodo";
 
 const TodoPage = async () => {
   const session = await auth();
@@ -22,7 +23,9 @@ const TodoPage = async () => {
         <Welcome className="sm:mt-36 superSmall:mt-64 superDuperSmall:mt-56 mt-36" />
       )}
       <div className="flex justify-start items-start w-full">
-        <LoginButton />
+        <Suspense key={user?.id} fallback={<SkeletonTodo />}>
+          <LoginButton />
+        </Suspense>
       </div>
     </div>
   );

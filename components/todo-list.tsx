@@ -9,11 +9,14 @@ import {
   removeTodo,
   updateTodoOrder,
   updateTodoStatus,
+  checkPassKeyRegistration,
 } from "@/server_actions/data";
 import { cn } from "@/lib/utils";
 import Filters from "./filters";
 import { filterType } from "@/lib/types";
 import { User } from "@prisma/client";
+
+import Link from "next/link";
 
 export default function TodoList({
   initialTodos,
@@ -24,6 +27,7 @@ export default function TodoList({
 }) {
   const [filter, setFilter] = useState<filterType>("all");
   const [cards, setCards] = useState<Todo[]>(initialTodos);
+  const [passkey, setPasskey] = useState<boolean>(true);
 
   async function handleActiveUpdate(id: number) {
     const temp = cards.map((card) => {
@@ -75,6 +79,10 @@ export default function TodoList({
 
   useEffect(() => {
     updateOrder();
+    checkPassKeyRegistration(user.email).then((result) => {
+      console.log("Is registered:", result);
+      setPasskey(result);
+    });
   }, [cards]);
 
   return (
@@ -151,10 +159,23 @@ export default function TodoList({
       <div className="sm:hidden bg-neutral-white dark:bg-dark-theme-very-dark-desaturated-blue rounded h-11 mt-4 w-full">
         <Filters filter={filter} setFilter={setFilter} />
       </div>
-
-      <p className="flex items-center justify-center mt-12 text-neutral-dark-grayish-blue text-sm">
-        Drag and Drop to Reorder List
-      </p>
+      <div className="flex flex-col items-center mt-12 text-neutral-dark-grayish-blue text-sm gap-4">
+        <p className="flex items-center justify-center ">
+          Drag and Drop to Reorder List
+        </p>
+        {!passkey && (
+          <p>
+            Want an even more secure login,{" "}
+            <Link
+              href="/login"
+              className="font-extrabold text-primary-gradient-right hover:text-primary-gradient-left"
+            >
+              use a Passkey
+            </Link>{" "}
+            instead.
+          </p>
+        )}
+      </div>
     </main>
   );
 }

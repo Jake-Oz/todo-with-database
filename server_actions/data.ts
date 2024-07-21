@@ -109,8 +109,10 @@ export async function checkPassKeyRegistration(email: string) {
         Authenticator: true,
       },
     });
-    console.log(user?.Authenticator);
-    return user?.Authenticator ? true : false;
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user!.Authenticator.length > 0 ? true : false;
   } catch (error) {
     throw new Error("Passkey not found");
   }
